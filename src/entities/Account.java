@@ -1,5 +1,7 @@
 package entities;
 
+import exceptions.BusinessException;
+
 public class Account {
 	
 	private Integer number;
@@ -54,18 +56,31 @@ public class Account {
 	}
 	
 	public void withdraw(double amount) {
+		validateWithdraw(amount); // se passar então ele realiza o saque. se nao passar sera lançada uma exceção e uma mensagem de erro aparecerá (quem lança essa exceção é a minha funçao customizada BusinessException 
 		balance -= amount;
 	}
 	
-	public String validateWithdraw(double amount) {
+	/*public void validateWithdraw(double amount) {
 		if (amount > getWithdrawLimit()) {
-			return "Erro de saque: A quantia excede o limite de saque";
-		}
+			throw new RuntimeException ("Erro de saque: A quantia excede o limite de saque"); // forma de lançar uma exceção é com throw (instanciar uma exceção)->new RuntimeException(exceção padrão) 
+		}  //throw assim como o return corta o metodo
 		if (amount > getBalance()) {  //posso até tirar o else pq o return ja corta a funçao
-			return "Erro de saque: Saldo Insuficiente";
+			throw new  RuntimeException ("Erro de saque: Saldo Insuficiente");
 		}
-		return null;
+	} */
+	
+	//Essa forma de cima é usando um recurso pronto com o RuntimeException. Porem podemos criar uma exceção customizada (BusinessException): 
+	
+	private void validateWithdraw(double amount) { //com private nao estara disponivel fora desta classe
+		if (amount > getWithdrawLimit()) {
+			throw new BusinessException ("Erro de saque: A quantia excede o limite de saque"); 
+			}
+		if (amount > getBalance()) {  
+			throw new  BusinessException ("Erro de saque: Saldo Insuficiente");
+		}
 	}
+	
+	
 	
 
 }

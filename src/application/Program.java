@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import entities.Account;
+import exceptions.BusinessException;
 
 public class Program {
 
@@ -29,15 +30,14 @@ public class Program {
 		System.out.print("Informe uma quantia para sacar: ");
 		double amount = sc.nextDouble();
 		
-		String error = acc.validateWithdraw(amount);
-		if (error != null) {
-			System.out.println(error);
-		}
-		else {	
+		try {	//tentar executar a função  acc.withdraw(amount) porém se ela lançar uma exceção eu osso capturar esta exceção com catch
 			acc.withdraw(amount);
 			System.out.printf("Novo salto: %.2f%n", acc.getBalance());
 		}
-		
+		catch (BusinessException e) { //ou seja com catch estamos tratando essa exceção
+			//quando eu capturar a exceção (lembrando que quando instanciei a BusinessException dentro da classe Account eu passei uma função de erro) nessa variavel e teremos a mensagem de erro.
+			System.out.println(e.getMessage());
+		}
 		sc.close();
 	}
 
